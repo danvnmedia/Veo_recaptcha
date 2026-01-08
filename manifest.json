@@ -1,0 +1,80 @@
+﻿{
+    "manifest_version": 3,
+    "name": "VEO Token Sync",
+    "version": "6.1",
+    "description": "Capture and sync tokens from labs.google for VEO Creative Suite",
+    "icons": {
+        "16": "icon16.png",
+        "48": "icon48.png",
+        "128": "icon128.png"
+    },
+    "permissions": [
+        "webRequest",
+        "storage",
+        "scripting",
+        "tabs",
+        "activeTab"
+    ],
+    "host_permissions": [
+        "https://aisandbox-pa.googleapis.com/*",
+        "https://labs.google/*",
+        "http://localhost:*/*",
+        "http://127.0.0.1:*/*"
+    ],
+    "externally_connectable": {
+        "matches": [
+            "http://localhost:*/*",
+            "http://127.0.0.1:*/*",
+            "https://veo3-flow.web.app/*",
+            "https://veo3-flow.firebaseapp.com/*",
+            "https://week10-a16aa.web.app/*",
+            "https://week10-a16aa.firebaseapp.com/*",
+            "https://creative-suite.dan.ai.vn/*",
+            "https://*.dan.ai.vn/*"
+        ]
+    },
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "interceptor.js",
+                "auto_generator.js"
+            ],
+            "matches": [
+                "https://labs.google/*"
+            ]
+        }
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "https://labs.google/*"
+            ],
+            "js": [
+                "labs_content.js"
+            ],
+            "run_at": "document_start"
+        },
+        {
+            "matches": [
+                "http://localhost:*/*",
+                "http://127.0.0.1:*/*"
+            ],
+            "js": [
+                "content.js"
+            ],
+            "run_at": "document_start"
+        }
+    ],
+    "action": {
+        "default_title": "VEO Token Sync",
+        "default_popup": "popup.html",
+        "default_icon": {
+            "16": "icon16.png",
+            "48": "icon48.png",
+            "128": "icon128.png"
+        }
+    }
+}

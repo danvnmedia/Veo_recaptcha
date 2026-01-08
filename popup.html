@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 360px;
+            padding: 16px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #eee;
+            margin: 0;
+        }
+
+        h2 {
+            margin: 0 0 16px 0;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h2 span {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .card-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #aaa;
+        }
+
+        .badge {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge.warning {
+            background: #ff9800;
+        }
+
+        .badge.success {
+            background: #4CAF50;
+        }
+
+        .badge.error {
+            background: #f44336;
+        }
+
+        .token-display {
+            font-family: monospace;
+            font-size: 11px;
+            word-break: break-all;
+            max-height: 50px;
+            overflow-y: auto;
+            color: #888;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 8px;
+            border-radius: 6px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-sync {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+        }
+
+        .btn-sync:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        .btn-danger {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #eee;
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-row button {
+            flex: 1;
+        }
+
+        .hint {
+            font-size: 11px;
+            color: #666;
+            margin-top: 6px;
+        }
+
+        .extension-id {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px 12px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 12px;
+            color: #667eea;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .extension-id:hover {
+            background: rgba(102, 126, 234, 0.2);
+        }
+
+        .status-msg {
+            font-size: 12px;
+            text-align: center;
+            padding: 8px;
+            min-height: 20px;
+        }
+
+        .success {
+            color: #4CAF50;
+        }
+
+        .error {
+            color: #f44336;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>🔐 <span>VEO Token Sync</span></h2>
+
+    <!-- Extension ID Card -->
+    <div class="card">
+        <div class="card-title">Extension ID</div>
+        <div class="hint">Click to copy (paste vào Settings của app)</div>
+        <div class="extension-id" id="extensionId" onclick="copyExtensionId()"></div>
+    </div>
+
+    <!-- Bearer Token Card -->
+    <div class="card">
+        <div class="card-header">
+            <span class="card-title">Bearer Token</span>
+            <span class="badge" id="bearerStatus">Not captured</span>
+        </div>
+        <div class="token-display" id="bearerToken">
+            No token - Generate on labs.google/fx
+        </div>
+    </div>
+
+    <!-- reCAPTCHA Token Card -->
+    <div class="card">
+        <div class="card-header">
+            <span class="card-title">reCAPTCHA Token</span>
+            <span class="badge" id="recaptchaStatus">Not captured</span>
+        </div>
+        <div class="token-display" id="recaptchaToken">
+            No token - Generate on labs.google/fx
+        </div>
+    </div>
+
+    <div id="tokenTimestamp" style="font-size:11px;color:#666;margin-bottom:10px;text-align:center;"></div>
+
+    <!-- Sync to Cloud Button -->
+    <button class="btn-sync" id="syncToCloudBtn">
+        ☁️ Sync Token to Cloud
+    </button>
+    <div id="syncStatus" class="status-msg"></div>
+
+    <!-- Action Buttons -->
+    <div class="btn-row">
+        <button class="btn-secondary" id="copyTokensBtn">📋 Copy</button>
+        <button class="btn-danger" id="clearTokensBtn">🗑️ Clear</button>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+
+</html>
